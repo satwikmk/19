@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>For Varshini — Happy Birthday</title>
+
+ <!-- Clean font loading instead of base64 for easier editing -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+ <style>
+ :root {
+ --bg-main: #f9f5fd;
+ --bg-secondary: #ffffff;
+ --accent-soft: #e2d4f5;
+ --purple-main: #8e54e9;
+ --purple-light: #f1e6ff;
+ --purple-dark: #6b43a1;
+ --text-main: #2c1b4d;
+ --text-muted: #6b5a82;
+ --shadow-soft: 0 12px 32px rgba(142, 84, 233, 0.08);
+ }
+
+ * {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+ }
+
+ html {
+ scroll-behavior: smooth;
+ }
+
+ body {
+ font-family: -apple-system, 'Segoe UI', Roboto, system-ui, 'Helvetica Neue', Arial, sans-serif;
+ background: var(--bg-main);
+ background-image:
+ radial-gradient(var(--accent-soft) 1px, transparent 1px),
+ linear-gradient(180deg, #fdfbfe 0%, #f4eefa 50%, #eee1f7 100%);
+ background-size: 24px 24px, 100% 100%;
+ color: var(--text-main);
+ overflow-x: hidden;
+ min-height: 100vh;
+ }
+
+ canvas#petals {
+ position: fixed;
+ inset: 0;
+ pointer-events: none;
+ z-index: 99;
+ }
+
+ /* Floating Navbar */
+ .navbar {
+ position: fixed;
+ top: 20px;
+ left: 50%;
+ transform: translateX(-50%);
+ z-index: 100;
+ display: flex;
+ align-items: center;
+ gap: 16px;
+ padding: 8px 20px;
+ border-radius: 999px;
+ background: rgba(255, 255, 255, 0.88);
+ backdrop-filter: blur(12px);
+ -webkit-backdrop-filter: blur(12px);
+ border: 1px solid var(--accent-soft);
+ box-shadow: 0 8px 25px rgba(142, 84, 233, 0.15);
+ }
+
+ .nav-dots {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .nav-dots a {
+ width: 10px;
+ height: 10px;
+ border-radius: 50%;
+ background: var(--accent-soft);
+ transition: all 0.3s ease;
+ }
+
+ .nav-dots a.active {
+ background: var(--purple-main);
+ transform: scale(1.35);
+ box-shadow: 0 0 8px rgba(142, 84, 233, 0.4);
+ }
+
+ .nav-divider {
+ width: 1px;
+ height: 16px;
+ background: var(--accent-soft);
+ }
+
+ /* Music Player Button */
+ .music-btn {
+ background: none;
+ border: none;
+ color: var(--text-muted);
+ font-family: -apple-system, 'Segoe UI', Roboto, system-ui, 'Helvetica Neue', Arial, sans-serif;
+ font-size: 0.85rem;
+ font-weight: 500;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ padding: 4px 8px;
+ border-radius: 999px;
+ transition: all 0.2s ease;
+ }
+
+ .music-btn:hover {
+ color: var(--purple-main);
+ }
+
+ .eq-bars {
+ display: flex;
+ align-items: flex-end;
+ gap: 2px;
+ height: 12px;
+ }
+
+ .eq-bar {
+ width: 3px;
+ height: 100%;
+ background: var(--purple-main);
+ border-radius: 2px;
+ transform-origin: bottom;
+ animation: none;
+ }
+
+ .music-btn.playing .eq-bar:nth-child(1) { animation: eqAnim 0.6s ease-in-out infinite alternate; }
+ .music-btn.playing .eq-bar:nth-child(2) { animation: eqAnim 0.8s ease-in-out infinite alternate 0.2s; }
+ .music-btn.playing .eq-bar:nth-child(3) { animation: eqAnim 0.5s ease-in-out infinite alternate 0.4s; }
+
+ @keyframes eqAnim {
+ 0% { transform: scaleY(0.2); }
+ 100% { transform: scaleY(1); }
+ }
+
+ /* Sections */
+ section {
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ padding: 100px 24px 80px;
+ text-align: center;
+ position: relative;
+ z-index: 1;
+ }
+
+ .serif { font-family: 'Playfair Display', serif; }
+ .script { font-family: 'Dancing Script', cursive; }
+ .handwritten { font-family: 'Caveat', cursive; }
+
+ h1 {
+ font-size: clamp(2.6rem, 8vw, 5.2rem);
+ line-height: 1.15;
+ font-weight: 700;
+ color: var(--text-main);
+ letter-spacing: -0.5px;
+ margin-top: 14px;
+ }
+
+ h1 .name {
+ display: block;
+ font-family: 'Dancing Script', cursive;
+ color: var(--purple-main);
+ text-shadow: 0 4px 15px rgba(142, 84, 233, 0.15);
+ margin-top: 4px;
+ font-weight: 700;
+ }
+
+ p.lead {
+ font-size: clamp(1rem, 2.3vw, 1.2rem);
+ max-width: 580px;
+ line-height: 1.8;
+ color: var(--text-muted);
+ margin: 10px auto 0;
+ }
+
+ .theme-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ background: var(--bg-secondary);
+ border: 1px solid var(--accent-soft);
+ padding: 8px 22px;
+ border-radius: 999px;
+ font-size: 0.88rem;
+ letter-spacing: 1px;
+ color: var(--purple-main);
+ box-shadow: 0 4px 15px rgba(142, 84, 233, 0.15);
+ font-weight: 600;
+ }
+
+ .divider {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ margin: 22px auto;
+ color: var(--purple-dark);
+ }
+
+ .divider::before,
+ .divider::after {
+ content: '';
+ width: 40px;
+ height: 1px;
+ background: var(--accent-soft);
+ }
+
+ .age-tag {
+ display: inline-block;
+ margin-top: 14px;
+ font-size: clamp(3rem, 11vw, 6rem);
+ color: var(--purple-dark);
+ font-family: 'Dancing Script', cursive;
+ animation: floatSway 4s ease-in-out infinite;
+ opacity: 0.8;
+ }
+
+ @keyframes floatSway {
+ 0%, 100% { transform: translateY(0) rotate(-2deg); }
+ 50% { transform: translateY(-6px) rotate(2deg); }
+ }
+
+ /* HERO POLAROID CARD */
+ .photo-wrap {
+ margin-top: 28px;
+ position: relative;
+ display: inline-block;
+ }
+
+ .photo-card {
+ width: min(80vw, 300px);
+ background: #ffffff;
+ padding: 14px 14px 44px;
+ border-radius: 16px;
+ box-shadow: 0 16px 40px rgba(142, 84, 233, 0.15);
+ transform: rotate(-3deg);
+ transition: transform 0.4s ease, box-shadow 0.4s ease;
+ border: 1px solid var(--accent-soft);
+ position: relative;
+ }
+
+ .photo-card:hover {
+ transform: rotate(0deg) scale(1.03) translateY(-4px);
+ box-shadow: 0 24px 50px rgba(142, 84, 233, 0.25);
+ border-color: var(--purple-dark);
+ }
+
+ .photo-img-placeholder {
+ width: 100%;
+ aspect-ratio: 4/5;
+ border-radius: 10px;
+ background: #f4eefa;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: var(--text-muted);
+ font-size: 0.9rem;
+ border: 1px dashed var(--accent-soft);
+ overflow: hidden;
+ }
+ 
+ .photo-img-placeholder img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ display: none; /* remove this once you add your image src */
+ }
+
+ .photo-sticker {
+ position: absolute;
+ top: -12px;
+ right: -10px;
+ font-size: 1.8rem;
+ filter: drop-shadow(0 2px 5px rgba(142, 84, 233, 0.3));
+ }
+
+ .photo-cap {
+ position: absolute;
+ bottom: 10px;
+ left: 0;
+ right: 0;
+ text-align: center;
+ font-family: 'Dancing Script', cursive;
+ font-size: 1.35rem;
+ color: var(--purple-main);
+ font-weight: 700;
+ }
+
+ /* SECTION 2: ABOUT CARDS GRID */
+ .grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+ gap: 18px;
+ max-width: 880px;
+ width: 100%;
+ margin-top: 36px;
+ }
+
+ .card {
+ perspective: 1000px;
+ height: 195px;
+ cursor: pointer;
+ }
+
+ .card-inner {
+ position: relative;
+ width: 100%;
+ height: 100%;
+ transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+ transform-style: preserve-3d;
+ }
+
+ .card.flipped .card-inner {
+ transform: rotateY(180deg);
+ }
+
+ .face {
+ position: absolute;
+ inset: 0;
+ backface-visibility: hidden;
+ border-radius: 18px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ padding: 20px;
+ box-shadow: var(--shadow-soft);
+ }
+
+ .front {
+ background: var(--bg-secondary);
+ border: 1px solid var(--accent-soft);
+ color: var(--text-main);
+ transition: all 0.3s ease;
+ }
+
+ .card:hover .front {
+ border-color: var(--purple-dark);
+ transform: translateY(-3px);
+ }
+
+ .front .ico {
+ font-size: 2.4rem;
+ margin-bottom: 8px;
+ }
+
+ .front span {
+ font-family: -apple-system, 'Segoe UI', Roboto, system-ui, 'Helvetica Neue', Arial, sans-serif;
+ font-size: 0.95rem;
+ font-weight: 600;
+ color: var(--purple-main);
+ }
+
+ .back {
+ background: linear-gradient(135deg, #eaddf7, #d4bef0);
+ border: 1px solid var(--purple-dark);
+ transform: rotateY(180deg);
+ color: var(--purple-dark);
+ font-size: 0.95rem;
+ line-height: 1.6;
+ text-align: center;
+ font-weight: 500;
+ }
+
+ /* SECTION 3: PHOTO GALLERY */
+ .gallery-container {
+ width: 100%;
+ max-width: 880px;
+ margin-top: 30px;
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+ gap: 16px;
+ }
+
+ .gallery-item {
+ position: relative;
+ aspect-ratio: 1 / 1;
+ border-radius: 12px;
+ overflow: hidden;
+ background: #ffffff;
+ border: 1px solid var(--accent-soft);
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: var(--text-muted);
+ font-size: 0.8rem;
+ cursor: pointer;
+ }
+
+ .gallery-item img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ display: none; /* remove this once you add your image src */
+ }
+ 
+ .gallery-item:hover {
+ transform: translateY(-5px) scale(1.02);
+ border-color: var(--purple-dark);
+ box-shadow: 0 10px 25px rgba(142, 84, 233, 0.15);
+ }
+
+ /* SECTION 3.5: WISHES/PROMISES */
+ .wishes-list {
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ margin-top: 32px;
+ width: 100%;
+ max-width: 600px;
+ }
+
+ .wish-item {
+ background: var(--bg-secondary);
+ border: 1px solid var(--accent-soft);
+ padding: 18px 24px;
+ border-radius: 14px;
+ display: flex;
+ align-items: center;
+ gap: 18px;
+ box-shadow: var(--shadow-soft);
+ transition: all 0.3s ease;
+ text-align: left;
+ cursor: default;
+ }
+
+ .wish-item:hover {
+ transform: translateX(8px);
+ border-color: var(--purple-main);
+ box-shadow: 0 8px 20px rgba(142, 84, 233, 0.15);
+ }
+ 
+ .wish-item .ico {
+ font-size: 1.5rem;
+ }
+
+ .wish-item span {
+ font-size: 1.05rem;
+ font-weight: 500;
+ color: var(--text-main);
+ line-height: 1.4;
+ }
+
+ /* SECTION 4 & 5: ENVELOPE & LETTER */
+ .envelope-wrapper {
+ margin-top: 32px;
+ width: 100%;
+ max-width: 620px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ }
+
+ .envelope {
+ width: 210px;
+ height: 135px;
+ background: linear-gradient(135deg, #eaddf7, #d4bef0);
+ border-radius: 14px;
+ position: relative;
+ box-shadow: 0 14px 30px rgba(142, 84, 233, 0.2);
+ cursor: pointer;
+ transition: transform 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border: 1px solid var(--accent-soft);
+ z-index: 2;
+ }
+
+ .envelope:hover {
+ transform: translateY(-5px);
+ border-color: var(--purple-dark);
+ }
+
+ .wax-seal {
+ width: 48px;
+ height: 48px;
+ background: radial-gradient(circle, #b886ee 0%, #8e54e9 100%);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ box-shadow: 0 4px 10px rgba(142, 84, 233, 0.3);
+ color: #ffffff;
+ font-family: 'Playfair Display', serif;
+ font-weight: 700;
+ font-size: 1.3rem;
+ }
+
+ .letter {
+ background: var(--bg-secondary);
+ color: var(--text-main);
+ max-width: 620px;
+ width: 100%;
+ border-radius: 20px;
+ padding: 0 36px;
+ text-align: left;
+ line-height: 1.9;
+ font-size: 1.05rem;
+ box-shadow: 0 20px 50px rgba(142, 84, 233, 0.15);
+ border: 1px solid var(--accent-soft);
+ transform: translateY(-50px);
+ opacity: 0;
+ max-height: 0;
+ overflow: hidden;
+ transition: all 0.7s ease;
+ margin-top: 0;
+ z-index: 1;
+ }
+
+ .letter.show {
+ max-height: 2000px;
+ padding: 44px 36px;
+ margin-top: 24px;
+ transform: translateY(0);
+ opacity: 1;
+ }
+
+ .letter h3 {
+ color: var(--purple-main);
+ margin-bottom: 18px;
+ font-size: 1.5rem;
+ font-family: 'Playfair Display', serif;
+ }
+
+ .sign {
+ margin-top: 28px;
+ text-align: right;
+ color: var(--purple-main);
+ font-family: 'Dancing Script', cursive;
+ font-size: 1.7rem;
+ font-weight: 700;
+ }
+
+ footer {
+ padding: 44px 20px 64px;
+ text-align: center;
+ color: var(--text-muted);
+ font-size: 0.85rem;
+ z-index: 2;
+ position: relative;
+ }
+
+ </style>
+</head>
+
+<body>
+
+ <!-- Navbar -->
+ <nav class="navbar">
+ <div class="nav-dots">
+ <a href="#hero" class="active"></a>
+ <a href="#about"></a>
+ <a href="#gallery"></a>
+ <a href="#wishes"></a>
+ <a href="#letter"></a>
+        <a href="#poem"></a>
+ </div>
+ <div class="nav-divider"></div>
+ <button class="music-btn" id="muteBtn">
+ <div class="eq-bars">
+ <div class="eq-bar"></div>
+ <div class="eq-bar"></div>
+ <div class="eq-bar"></div>
+ </div>
+ <span id="musicText">♪ music: off</span>
+ </button>
+ </nav>
+
+ <!-- Canvas Petals/Celebration -->
+ <canvas id="petals"></canvas>
+
+ <!-- Background Audio (Drop a file named 'music.mp3' in the same folder) -->
+ <audio id="bgMusic" loop>
+ <source src="music.mp3" type="audio/mpeg">
+ </audio>
+
+ <!-- HERO SECTION -->
+ <section id="hero">
+ <div class="theme-pill outfit">
+ <span>✨ a little something made for you</span>
+ </div>
+
+ <h1 class="serif">
+ Happy Birthday
+ <span class="name">Varshini</span>
+ </h1>
+
+ <div class="divider">✦</div>
+
+ <p class="lead">
+ Officially waving goodbye to the teenage era. Here's to twenty, without any of the boring responsibilities!
+ </p>
+
+ <div class="age-tag script">twenty</div>
+
+ <!-- Polaroid Photo Card -->
+ <div class="photo-wrap">
+ <div class="photo-card" id="photoCard">
+ <div class="photo-sticker">✨</div>
+ <div class="photo-img-placeholder">
+ <!-- Add your image source here later -->
+ <img src="" alt="Varshini">
+ <span>[Insert Main Image Here]</span>
+ </div>
+ <div class="photo-cap">Happy Birthday to the beautiful girl!!🫶🏻💖</div>
+ </div>
+ </div>
+ </section>
+
+ <!-- SECTION 2: ABOUT CARDS -->
+ <section id="about">
+ <h2 class="serif">Some Things I Love About You</h2>
+ <p class="lead">Click the cards to flip them!</p>
+ <div class="grid">
+ <!-- Card 1 -->
+ <div class="card" onclick="this.classList.toggle('flipped')">
+ <div class="card-inner">
+ <div class="face front">
+ <div class="ico">🤍</div>
+ <span>The kindness</span>
+ </div>
+ <div class="face back">
+ I really appreciate the way you treat people around you. Your kindness, the little things you do, and the way you make everyone, especially me, feel comfortable around you mean more to me than I usually say. I’m genuinely grateful for you.
+ </div>
+ </div>
+ </div>
+ <!-- Card 2 -->
+ <div class="card" onclick="this.classList.toggle('flipped')">
+ <div class="card-inner">
+ <div class="face front">
+ <div class="ico">🫶🏻</div>
+ <span>The childish girl</span>
+ </div>
+ <div class="face back">
+ I really like that playful, childish side of you. It’s honestly one of the things I find really endearing about you.
+ </div>
+ </div>
+ </div>
+ <!-- Card 3 -->
+ <div class="card" onclick="this.classList.toggle('flipped')">
+ <div class="card-inner">
+ <div class="face front">
+ <div class="ico">🤯</div>
+ <span>Panic button</span>
+ </div>
+ <div class="face back">
+ You somehow make even your little moments of panic look cute.
+ </div>
+ </div>
+ </div>
+ <!-- Card 4 -->
+ <div class="card" onclick="this.classList.toggle('flipped')">
+ <div class="card-inner">
+ <div class="face front">
+ <div class="ico">🙃</div>
+ <span>The "You're Gay" thing</span>
+ </div>
+ <div class="face back">
+ You call me this for absolutely no reason. No worries I've made peace with it now.
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- SECTION 3: PHOTO GALLERY -->
+ <section id="gallery">
+ <h2 class="serif">Favorite Moments</h2>
+ <p class="lead">Just a few snapshots of us.</p>
+ 
+ <div class="gallery-container">
+ <!-- Gallery Image 1 -->
+ <div class="gallery-item">
+ <img src="" alt="Gallery Image 1">
+ <span>[Image 1]</span>
+ </div>
+ <!-- Gallery Image 2 -->
+ <div class="gallery-item">
+ <img src="" alt="Gallery Image 2">
+ <span>[Image 2]</span>
+ </div>
+ <!-- Gallery Image 3 -->
+ <div class="gallery-item">
+ <img src="" alt="Gallery Image 3">
+ <span>[Image 3]</span>
+ </div>
+ <!-- Gallery Image 4 -->
+ <div class="gallery-item">
+ <img src="" alt="Gallery Image 4">
+ <span>[Image 4]</span>
+ </div>
+ </div>
+ </section>
+
+ <!-- SECTION 3.5: WISHES/PROMISES -->
+ <section id="wishes">
+ <h2 class="serif">Wishes for Chapter 20</h2>
+ <p class="lead">Because entering your twenties should be nothing but fun.</p>
+ 
+ <div class="wishes-list">
+ <div class="wish-item">
+ <div class="ico">✨</div>
+ <span>More spontaneous late-night adventures and random plans.</span>
+ </div>
+ <div class="wish-item">
+ <div class="ico">🍕</div>
+ <span>An endless supply of your absolute favorite foods.</span>
+ </div>
+ <div class="wish-item">
+ <div class="ico">😌</div>
+ <span>Zero stress over the little things that don't actually matter.</span>
+ </div>
+ <div class="wish-item">
+ <div class="ico">💖</div>
+ <span>Knowing I'm always here for you when you need to hit the panic button!</span>
+ </div>
+ </div>
+ </section>
+
+ <!-- SECTION 4: LETTER -->
+ <section id="letter">
+ <h2 class="serif">A Little Note</h2>
+ <p class="lead">Hope this makes you Happy!</p>
+ 
+ <div class="envelope-wrapper">
+ <div class="envelope" onclick="document.getElementById('secretLetter').classList.toggle('show')">
+ <div class="wax-seal">V</div>
+ </div>
+ <p class="lead" style="font-size: 0.9rem; margin-top: 15px; cursor: pointer; user-select: none;" onclick="document.getElementById('secretLetter').classList.toggle('show')">(Click the envelope to open)</p>
+
+ <div class="letter" id="secretLetter">
+ <h3>Dear Varshini,</h3>
+ <p>[Type out your full birthday message right here.]</p>
+ <p>[Keep adding paragraph tags like this one if you want to make it longer!]</p>
+ <div class="sign">Love,<br>[Your Name]</div>
+ </div>
+ </div>
+ </section>
+
+ <!-- SECTION 5: POEM -->
+ <section id="poem">
+ <div class="theme-pill outfit" style="margin-bottom: 20px; cursor: pointer; user-select: none;" onclick="document.getElementById('poemLetter').classList.toggle('show')">
+ <span>✨ One more thing...</span>
+ </div>
+ 
+ <div class="envelope-wrapper">
+ <div class="envelope" onclick="document.getElementById('poemLetter').classList.toggle('show')">
+ <div class="wax-seal" style="font-size: 1.5rem;">🤍</div>
+ </div>
+ <p class="lead" style="font-size: 0.9rem; margin-top: 15px; cursor: pointer; user-select: none;" onclick="document.getElementById('poemLetter').classList.toggle('show')">(Click to reveal)</p>
+
+ <div class="letter" id="poemLetter" style="text-align: center; padding: 0 30px;">
+ <div style="padding-top: 40px;">
+ <p class="script" style="font-size: 1.8rem; line-height: 1.8; color: var(--purple-dark); margin-bottom: 0;">
+ [Drop your beautiful poem here]<br>
+ [Line two of your poem]<br>
+ [Line three of your poem]<br>
+ [Line four of your poem]
+ </p>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <footer>
+ 💜 Could've done more but I'm really broke now and btw god gifted you with me so it balances out...😉<br>
+Hope this made your day a little extra special.🤭
+ </footer>
+
+ <!-- Celebration Animation & Scripts -->
+ <script>
+ const canvas = document.getElementById('petals');
+ const ctx = canvas.getContext('2d');
+
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+
+ const particles = [];
+ // Light purple theme celebration colors: gold, light purple, deep purple, and white
+ const colors = ['#8e54e9', '#d4af37', '#e2d4f5', '#ffffff'];
+
+ class Particle {
+      constructor(x = null, y = null) {
+        this.x = x !== null ? x : Math.random() * canvas.width;
+        this.y = y !== null ? y : Math.random() * canvas.height - canvas.height;
+        this.size = Math.random() * 6 + 4;
+        
+        if (x !== null && y !== null) {
+          // Burst particle properties
+          this.speedX = (Math.random() - 0.5) * 12;
+          this.speedY = (Math.random() - 1) * 12;
+          this.gravity = 0.4;
+          this.isBurst = true;
+        } else {
+          // Normal falling particle properties
+          this.speedY = Math.random() * 2 + 1;
+          this.speedX = Math.random() * 2 - 1;
+          this.gravity = 0;
+          this.isBurst = false;
+        }
+        
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = Math.random() * 2 - 1;
+      }
+      update() {
+        if (this.isBurst) {
+          this.speedY += this.gravity;
+        }
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.rotation += this.rotationSpeed;
+
+        // Reset or remove particle when it falls off screen
+        if (this.y > canvas.height) {
+          if (this.isBurst) {
+            this.dead = true;
+          } else {
+            this.y = -10;
+            this.x = Math.random() * canvas.width;
+          }
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation * Math.PI / 180);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        // Creating a soft oval petal/confetti shape
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < 75; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function createBurst(x, y) {
+      for (let i = 0; i < 20; i++) {
+        particles.push(new Particle(x, y));
+      }
+    }
+
+    window.addEventListener('click', (e) => {
+      // Create a burst wherever the user clicks, but avoid doing it if clicking navbar links to prevent annoyance
+      if(!e.target.closest('.navbar')) {
+        createBurst(e.clientX, e.clientY);
+      }
+    });
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].dead) {
+          particles.splice(i, 1);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+ // Music Player Setup
+ const muteBtn = document.getElementById('muteBtn');
+ const musicText = document.getElementById('musicText');
+ const bgMusic = document.getElementById('bgMusic');
+ 
+ muteBtn.addEventListener('click', () => {
+ if (bgMusic.paused) {
+ bgMusic.play();
+ muteBtn.classList.add('playing');
+ musicText.textContent = '♪ music: on';
+ } else {
+ bgMusic.pause();
+ muteBtn.classList.remove('playing');
+ musicText.textContent = '♪ music: off';
+ }
+ });
+
+ // Active Navigation Dots Logic
+ const sections = document.querySelectorAll('section');
+ const navDots = document.querySelectorAll('.nav-dots a');
+
+ const observerOptions = {
+ root: null,
+ rootMargin: '-20% 0px -60% 0px', 
+ threshold: 0
+ };
+
+ const observer = new IntersectionObserver((entries) => {
+ entries.forEach(entry => {
+ if (entry.isIntersecting) {
+ navDots.forEach(dot => dot.classList.remove('active'));
+ const id = entry.target.getAttribute('id');
+ const activeDot = document.querySelector(`.nav-dots a[href="#${id}"]`);
+ if (activeDot) {
+ activeDot.classList.add('active');
+ }
+ }
+ });
+ }, observerOptions);
+
+ sections.forEach(section => {
+ observer.observe(section);
+ });
+
+ // Handle window resize
+ window.addEventListener('resize', () => {
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+ });
+ </script>
+
+</body>
+</html>
