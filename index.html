@@ -53,6 +53,19 @@
  z-index: 99;
  }
 
+ /* Scroll Progress Bar */
+ .scroll-progress {
+ position: fixed;
+ top: 0;
+ left: 0;
+ height: 3px;
+ width: 0%;
+ background: linear-gradient(90deg, var(--accent-soft), var(--purple-main), var(--purple-dark));
+ z-index: 200;
+ transition: width 0.12s ease-out;
+ box-shadow: 0 0 12px rgba(142, 84, 233, 0.45);
+ }
+
  /* Floating Navbar */
  .navbar {
  position: fixed;
@@ -155,6 +168,21 @@
  text-align: center;
  position: relative;
  z-index: 1;
+ scroll-margin-top: 90px;
+ }
+
+ /* Scroll Transition / Reveal from down to up */
+ .reveal {
+ opacity: 0;
+ transform: translateY(50px);
+ transition: opacity 0.9s cubic-bezier(0.22, 0.68, 0.2, 1),
+ transform 0.9s cubic-bezier(0.22, 0.68, 0.2, 1);
+ will-change: opacity, transform;
+ }
+
+ .reveal.in {
+ opacity: 1;
+ transform: none;
  }
 
  .serif { font-family: 'Playfair Display', serif; }
@@ -560,6 +588,9 @@
 
 <body>
 
+ <!-- Scroll Progress Bar -->
+ <div class="scroll-progress" id="progressBar"></div>
+
  <!-- Navbar -->
  <nav class="navbar">
  <div class="nav-dots">
@@ -590,7 +621,7 @@
  </audio>
 
  <!-- HERO SECTION -->
- <section id="hero">
+ <section id="hero" class="reveal">
  <div class="theme-pill outfit">
  <span>✨ a little something made for you</span>
  </div>
@@ -623,7 +654,7 @@
  </section>
 
  <!-- SECTION 2: ABOUT CARDS -->
- <section id="about">
+ <section id="about" class="reveal">
  <h2 class="serif">Some Things I Love About You</h2>
  <p class="lead">Click the cards to flip them!</p>
  <div class="grid">
@@ -679,7 +710,7 @@
  </section>
 
  <!-- SECTION 3: PHOTO GALLERY -->
- <section id="gallery">
+ <section id="gallery" class="reveal">
  <h2 class="serif">Favorite Moments</h2>
  <p class="lead">Just a few snapshots of us.</p>
  
@@ -708,7 +739,7 @@
  </section>
 
  <!-- SECTION 3.5: WISHES/PROMISES -->
- <section id="wishes">
+ <section id="wishes" class="reveal">
  <h2 class="serif">Wishes for Chapter 20</h2>
  <p class="lead">Because entering your twenties should be nothing but fun.</p>
  
@@ -733,8 +764,8 @@
  </section>
 
  <!-- SECTION 4: LETTER -->
- <section id="letter">
- <h2 class="serif">A Little Note</h2>
+ <section id="letter" class="reveal">
+ <h2 class="serif">There's note,too</h2>
  <p class="lead">Hope this makes you Happy!</p>
  
  <div class="envelope-wrapper">
@@ -745,15 +776,25 @@
 
  <div class="letter" id="secretLetter">
  <h3>Dear Varshini,</h3>
- <p>[Type out your full birthday message right here.]</p>
- <p>[Keep adding paragraph tags like this one if you want to make it longer!]</p>
- <div class="sign">Love,<br>[Your Name]</div>
+ <p>Happy birthday. I've been trying to write this in a way that doesn't make it a big deal, which turned out to be hard. You have this way of making perfectly ordinary days feel like they're worth remembering, and it's difficult to be casual about that.
+</p><br>
+ <p>It's really hard to express the gratitude I have for you in words cuz you really make everything simple for me, lets me cry infront you, enlightens me with my own potential, makes me feel comfortable and safe around you, never lets me feel left out. Thank you soo much for just being there in my life and you'll never get rid of me this soon.
+</p><br>
+<p>Soo to tell you about you, for the words are pretty not enough. You're the sunlight of your own. Spread the sparkle wherever you step in. Somehow manages to make everyone comfortable around you. The kindness you have towards everyone is really appreciate-able. A terrible decision maker(I had to mention this). A overly sensitive little girl who ugly cry for little things which is really brave(not a taunt btw). A overly overthinker for even a little thing that never gonna happen in all the possible timelines of quantum physics. All this, yet soo much to tell about you and still feels inadequate.
+</p><br>
+<p>Soo for now, no grand speeches. Just this: I notice more about you than I prolly have room for but I haven't worked out what to do with any of it. For today, I only wanted you to know that you matter to me a good deal more than I've ever said out loud, for me, you're little extra special amongst all the people here and I'm really proud of what you truly are in a way people pretend to be. I'm always here for you for anything and everything you need.
+</p><br>
+<p>May your days be softer, your smiles wider, and your heart lighter this year. Happy birthday, beautiful soul. You've earned every bit of it!
+</p><br>
+<p>(Thought of making it short and sweet but how can someone write about you in the a short way possible😉)
+</p>
+ <div class="sign">With Love,<br>Me</div>
  </div>
  </div>
  </section>
 
  <!-- SECTION 5: POEM -->
- <section id="poem">
+ <section id="poem" class="reveal">
  <div class="theme-pill outfit" style="margin-bottom: 20px; cursor: pointer; user-select: none;" onclick="document.getElementById('poemLetter').classList.toggle('show')">
  <span>✨ One more thing...</span>
  </div>
@@ -767,19 +808,16 @@
  <div class="letter" id="poemLetter" style="text-align: center; padding: 0 30px;">
  <div style="padding-top: 40px;">
  <p class="script" style="font-size: 1.8rem; line-height: 1.8; color: var(--purple-dark); margin-bottom: 0;">
- [Drop your beautiful poem here]<br>
- [Line two of your poem]<br>
- [Line three of your poem]<br>
- [Line four of your poem]
- </p>
+ They say home is a place, but I think they got that wrong.<br>
+ Sometimes it is just a person you feel strangely comfortable around<br>
+and for me that is You!</p>
  </div>
  </div>
  </div>
  </section>
 
  <footer>
- 💜 Could've done more but I'm really broke now and btw god gifted you with me so it balances out...😉<br>
-Hope this made your day a little extra special.🤭
+ Made with a little extra effort, hope this made your day a little extra special...🤭
  </footer>
 
  <!-- Celebration Animation & Scripts -->
@@ -883,6 +921,25 @@ Hope this made your day a little extra special.🤭
 
     init();
     animate();
+
+    // Scroll Progress & Reveal Observer
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      const bar = document.getElementById('progressBar');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    const revealObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
  // Music Player Setup
  const muteBtn = document.getElementById('muteBtn');
